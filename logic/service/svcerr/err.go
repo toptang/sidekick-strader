@@ -9,7 +9,7 @@ const (
 )
 
 var (
-	ErrMap = map[int]string{
+	ERROR_MAP = map[int]string{
 		INPUT_ERROR:               "query input error",
 		FUTURE_TRADE_ERROR:        "future trade error",
 		FUTURE_TRADE_CANCEL_ERROR: "future trade cancel error",

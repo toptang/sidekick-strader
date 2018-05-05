@@ -2,6 +2,7 @@ package service
 
 import (
 	"net/http"
+	"sidekick/strader/logic/service/handlers/hokex"
 	"sidekick/strader/logic/service/responses"
 	"sidekick/strader/logic/service/svcerr"
 	"xframe/handler/http_handler"
@@ -15,8 +16,8 @@ var (
 	httpHandlers = map[string]struct {
 		Handler func(*http.Request) (interface{}, int)
 	}{
-		"/future-trade":  {Handler: hokex.FutureTrade},
-		"/future-cancel": {Handler: hokex.FutureCancel},
+		"/okex/future-trade":  {Handler: hokex.FutureTrade},
+		"/okex/future-cancel": {Handler: hokex.FutureCancel},
 	}
 )
 

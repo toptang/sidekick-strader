@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"sidekick/strader/app"
+	_ "sidekick/strader/logic/service"
 	"sidekick/strader/utils"
 	"xframe/cmd"
 	"xframe/config"
@@ -21,19 +22,22 @@ func main() {
 	cmd.DumpCommand()
 
 	//init configuration
-	var app app.Config
-	err := config.LoadConfigFromFileV2(&app, *conf)
-
+	var appConf app.Config
+	err := config.LoadConfigFromFileV2(&appConf, *conf)
 	//TODO  use errd
 	if err != nil {
 		panic(fmt.Sprintf("Load configuration error: %v", err))
 	}
+	fmt.Println(appConf)
 
 	//init http service conf
-	utils.InitHttp(app.HttpConf)
+	utils.InitHttp(appConf.HttpConf)
 
 	//init log
-	utils.InitLog(app.LogConf)
+	utils.InitLog(appConf.LogConf)
+
+	//init upstream
+	utils.InitOkexConfig(appConf.UpstreamConf.OkexConf)
 
 	//start service
 	if err = server.RunHTTPMux(utils.GetHttpAddr(), utils.GetHttpPort(), http_handler.Rt, utils.GetHttpRTimeout(), utils.GetHttpWTimeout()); err != nil {

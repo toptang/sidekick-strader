@@ -3,6 +3,7 @@ package responses
 import (
 	"encoding/json"
 	"net/http"
+	"sidekick/strader/logic/service/svcerr"
 	"xframe/log"
 )
 
