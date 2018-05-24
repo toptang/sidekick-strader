@@ -55,3 +55,25 @@ func ParseFutureTradeCancelReq(r *http.Request) (req FutureTradeCancelReq, err e
 	}
 	return
 }
+
+//---------------------------
+type FutureDevolveReq struct {
+	Symbol string `json:"symbol"`
+	Type   string `json:"type"`
+	Amount string `json:"amount"`
+}
+
+func checkFutureDevolveReq(req FutureDevolveReq) bool {
+	return !(req.Symbol == "" || req.Type == "" || req.Amount == "")
+}
+
+func ParseFutureDevolveReq(r *http.Request) (req FutureDevolveReq, err error) {
+	err = utils.ParsePostRequest(r, &req)
+	if err != nil {
+		return
+	}
+	if !checkFutureDevolveReq(req) {
+		err = errors.New("check future_devolve query empty")
+	}
+	return
+}

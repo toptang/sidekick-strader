@@ -16,8 +16,9 @@ var (
 	httpHandlers = map[string]struct {
 		Handler func(*http.Request) (interface{}, int)
 	}{
-		"/okex/future-trade":  {Handler: hokex.FutureTrade},
-		"/okex/future-cancel": {Handler: hokex.FutureCancel},
+		"/okex/future-trade":   {Handler: hokex.FutureTrade},
+		"/okex/future-cancel":  {Handler: hokex.FutureCancel},
+		"/okex/future-devolve": {Handler: hokex.FutureDevolve},
 	}
 )
 

@@ -20,25 +20,18 @@ func main() {
 	//init commandLine
 	cmd.ParseCommand()
 	cmd.DumpCommand()
-
 	//init configuration
 	var appConf app.Config
 	err := config.LoadConfigFromFileV2(&appConf, *conf)
-	//TODO  use errd
 	if err != nil {
 		panic(fmt.Sprintf("Load configuration error: %v", err))
 	}
-	fmt.Println(appConf)
-
 	//init http service conf
 	utils.InitHttp(appConf.HttpConf)
-
 	//init log
 	utils.InitLog(appConf.LogConf)
-
 	//init upstream
 	utils.InitOkexConfig(appConf.UpstreamConf.OkexConf)
-
 	//start service
 	if err = server.RunHTTPMux(utils.GetHttpAddr(), utils.GetHttpPort(), http_handler.Rt, utils.GetHttpRTimeout(), utils.GetHttpWTimeout()); err != nil {
 		panic(fmt.Sprintf("run tmatric service error: %v", err))

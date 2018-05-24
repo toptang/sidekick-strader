@@ -4,7 +4,8 @@
 		"port": "int"
 	},
 	"log": {
-		"log_level": "DEBUG"
+		"log_level": "string",
+		"stack_trace": "bool"
 	},
 	"upstream": {
 		"okex": {

@@ -116,6 +116,49 @@ func (this *OkexApi) FutureTradeCancel(symbol, contractType, orderId string) ([]
 	return res, true
 }
 
+func (this *OkexApi) FutureTradeDevolve(symbol, ttype, amount string) ([]byte, bool) {
+	var (
+		params = make(map[string]string)
+		header = make(http.Header)
+	)
+	//params and sign
+	params["symbol"] = symbol
+	params["type"] = ttype
+	params["amount"] = amount
+	params["api_key"] = utils.GetOkexKey()
+	signature := this.Sign(params, utils.GetOkexSecret())
+	params["sign"] = signature
+	//url
+	addr := fmt.Sprintf("%s%s", BASE_URI, FTRADE_DEVOLVE_URI)
+	//header
+	header.Set("content-type", "application/x-www-form-urlencoded")
+	//body
+	val := url.Values{}
+	for k, v := range params {
+		val.Set(k, v)
+	}
+	log.DEBUG(val)
+	body := bytes.NewBuffer([]byte(val.Encode()))
+	res, err, statusCode := api.SendHttpPostRequest(addr, header, body, 10)
+	//res, err := http.PostForm(addr, val)
+	if err != nil {
+		log.ERRORF("[api_okex]send ttrade devolve to upstream error: %v", err)
+		return nil, false
+	}
+	if statusCode != 200 {
+		log.ERRORF("[api_okex]ttrade devolve status code is not 200")
+		return nil, false
+	}
+	/*defer res.Body.Close()
+	result, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.ERRORF("[api_okex]ttrade cancel read response body error:%v", err)
+		return nil, false
+	}
+	return result, true*/
+	return res, true
+}
+
 func (this *OkexApi) Sign(params map[string]string, apiSecret string) string {
 	var (
 		keyLst     = make([]string, 0)
