@@ -24,7 +24,7 @@ func FutureTrade(r *http.Request) (interface{}, int) {
 		return nil, svcerr.FUTURE_TRADE_ERROR
 	}
 	//return
-	return string(res), svcerr.SUCCESS
+	return res, svcerr.SUCCESS
 }
 
 func FutureCancel(r *http.Request) (interface{}, int) {
@@ -43,7 +43,7 @@ func FutureCancel(r *http.Request) (interface{}, int) {
 		return nil, svcerr.FUTURE_TRADE_ERROR
 	}
 	//return
-	return string(res), svcerr.SUCCESS
+	return res, svcerr.SUCCESS
 }
 
 func FutureDevolve(r *http.Request) (interface{}, int) {
@@ -62,5 +62,5 @@ func FutureDevolve(r *http.Request) (interface{}, int) {
 		return nil, svcerr.FUTURE_TRADE_ERROR
 	}
 	//return
-	return string(res), svcerr.SUCCESS
+	return res, svcerr.SUCCESS
 }

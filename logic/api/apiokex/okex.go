@@ -3,6 +3,7 @@ package apiokex
 import (
 	"bytes"
 	"crypto/md5"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -21,7 +22,7 @@ func NewOkexApi() *OkexApi {
 	return new(OkexApi)
 }
 
-func (this *OkexApi) FutureTrade(symbol, contractType, price, amount, ttype, matchPrice, leverRate string) ([]byte, bool) {
+func (this *OkexApi) FutureTrade(symbol, contractType, price, amount, ttype, matchPrice, leverRate string) (result FutureResult, ok bool) {
 	var (
 		params = make(map[string]string)
 		header = make(http.Header)
@@ -56,11 +57,11 @@ func (this *OkexApi) FutureTrade(symbol, contractType, price, amount, ttype, mat
 	//res, err := http.PostForm(addr, val)
 	if err != nil {
 		log.ERRORF("[api_okex]send ttrade to upstream error: %v", err)
-		return nil, false
+		return result, false
 	}
 	if statusCode != 200 {
 		log.ERRORF("[api_okex]ttrade status code is not 200")
-		return nil, false
+		return result, false
 	}
 	/*defer res.Body.Close()
 	result, err := ioutil.ReadAll(res.Body)
@@ -70,10 +71,11 @@ func (this *OkexApi) FutureTrade(symbol, contractType, price, amount, ttype, mat
 	}
 	//TODO add polling and callback
 	return result, true*/
-	return res, true
+	json.Unmarshal(res, &result)
+	return result, true
 }
 
-func (this *OkexApi) FutureTradeCancel(symbol, contractType, orderId string) ([]byte, bool) {
+func (this *OkexApi) FutureTradeCancel(symbol, contractType, orderId string) (result FutureResult, ok bool) {
 	var (
 		params = make(map[string]string)
 		header = make(http.Header)
@@ -100,11 +102,11 @@ func (this *OkexApi) FutureTradeCancel(symbol, contractType, orderId string) ([]
 	//res, err := http.PostForm(addr, val)
 	if err != nil {
 		log.ERRORF("[api_okex]send ttrade cancel to upstream error: %v", err)
-		return nil, false
+		return result, false
 	}
 	if statusCode != 200 {
 		log.ERRORF("[api_okex]ttrade cancel status code is not 200")
-		return nil, false
+		return result, false
 	}
 	/*defer res.Body.Close()
 	result, err := ioutil.ReadAll(res.Body)
@@ -113,10 +115,11 @@ func (this *OkexApi) FutureTradeCancel(symbol, contractType, orderId string) ([]
 		return nil, false
 	}
 	return result, true*/
-	return res, true
+	json.Unmarshal(res, &result)
+	return result, true
 }
 
-func (this *OkexApi) FutureTradeDevolve(symbol, ttype, amount string) ([]byte, bool) {
+func (this *OkexApi) FutureTradeDevolve(symbol, ttype, amount string) (result FutureResult, ok bool) {
 	var (
 		params = make(map[string]string)
 		header = make(http.Header)
@@ -143,11 +146,11 @@ func (this *OkexApi) FutureTradeDevolve(symbol, ttype, amount string) ([]byte, b
 	//res, err := http.PostForm(addr, val)
 	if err != nil {
 		log.ERRORF("[api_okex]send ttrade devolve to upstream error: %v", err)
-		return nil, false
+		return result, false
 	}
 	if statusCode != 200 {
 		log.ERRORF("[api_okex]ttrade devolve status code is not 200")
-		return nil, false
+		return result, false
 	}
 	/*defer res.Body.Close()
 	result, err := ioutil.ReadAll(res.Body)
@@ -156,7 +159,8 @@ func (this *OkexApi) FutureTradeDevolve(symbol, ttype, amount string) ([]byte, b
 		return nil, false
 	}
 	return result, true*/
-	return res, true
+	json.Unmarshal(res, &result)
+	return result, true
 }
 
 func (this *OkexApi) Sign(params map[string]string, apiSecret string) string {
